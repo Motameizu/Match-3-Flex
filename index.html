@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="uk" style="width: 100%; height: 100%;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="ad.size" content="width=300,height=250">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Match-3 Flex</title>
+  <script> 
+    window.onerror = function (e,e_1,e_2,e_3,e_4) { 
+      alert('ошибка'); 
+      alert (e + ' ' + e_1 + ' ' + e_2 + ' ' + e_3 + ' ' + e_4); 
+      var body = document.getElementById('body_id'); 
+      var p = document.createElement('p');
+      p.innerHTML = e + ' ' + e_1 + ' ' + e_2 + ' ' + e_3 + ' ' + e_4; 
+      body.append(p); 
+      }; 
+    </script>
+  <style>
+    * { 
+        box-sizing: border-box; margin: 0; padding: 0; 
+   
+    }
+
+    body {
+      
+    }
+
+    /*
+    .body-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: all 2s ease-in-out;
+      filter: blur(0.00px);
+    }
+*/
+
+    @media (orientation: portrait) {
+      .body-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: repeat(9, 1fr);
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: all 2s ease-in-out;
+      filter: blur(0.00px);
+    }
+    .body-box > *:nth-child(n+37) {
+      display: none;
+    }
+
+    }
+
+    @media (orientation: landscape) {
+      .body-box {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: all 2s ease-in-out;
+      filter: blur(0.00px);
+    }
+
+
+    .body-box > *:nth-child(n+36) {
+  display: none;
+}
+}
+
+
+    .game-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      padding: 10%;
+      padding-bottom: 3px;
+      background: url('./freepik__background__98459.png') no-repeat center center;
+      background-size: 100% 100%;
+    }
+    .itemBox {
+      flex: 1;
+      height: 100%;
+      text-align: center;
+      width: 100%;
+      position: relative;
+      touch-action: none;
+    }
+    .img-element {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translate(-50%, 15%);
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      
+    }
+
+    .img-element-move {
+        position:  fixed;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        transform: translate(-50%, -50%);
+
+    }
+    /* Стилі для основного активу */
+    #primaryAsset {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 80%;
+      text-align: center;
+    }
+    #primaryAsset a {
+      display: block;
+      padding: 8px;
+      background: #ff5722;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+    .ok-box {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    position: absolute;
+    top: 0; bottom: auto; left: 0; right: 0;
+    background: repeating-linear-gradient(
+        to bottom, 
+rgb(178, 34, 34) 0%, 
+rgb(178, 34, 34) 50%, 
+rgb(178, 34, 34) 100%
+    );
+
+    /* :rgba(34, 11, 4, 0.65); */
+    width: 92%;
+    height: 92%; 
+    transition: all 0.75s ease-in-out;
+    z-index: 1000;
+    margin: 3% 4%;
+    filter: blur(0.0009px);
+    overflow: hidden;
+    text-align: center;
+
+    transform: scaleY(0);
+    transform-origin: top;
+    /*
+    transform: scaleX(0);
+    */
+    box-shadow: inset 0 0 10px rgba(50, 26, 1, 0.1),
+     0 0 3px rgba(50, 26, 1, 0.8);
+}
+
+.ok-box > div {
+  width: 100%;
+    height: 100%; 
+  background: repeating-linear-gradient(
+        to bottom, 
+rgb(178, 34, 34) 0%, 
+rgb(178, 34, 34) 50%, 
+rgb(178, 34, 34) 100%
+    );
+
+}
+
+.ok-box > img {
+  width: auto;
+  height: 100%;
+    margin: auto;
+    margin-top: 0%;
+    
+}
+
+
+
+    
+
+
+
+/* POPUP */
+
+#popup {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      top: 50%;
+      left: 50%;
+      z-index: 300;
+      -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      text-align: center;
+      width: 100%;
+      height: 80%;
+      max-width: 670px;
+      background: url("./popup-bg.jpg") center / cover no-repeat;
+      color: #333;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+
+      padding: 30px;
+      font-size: 3em;
+      border-radius: 10px;
+      -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      overflow: auto;
+
+    }
+
+    @media(max-width: 680px) {
+      #popup {
+        height: 100%;
+      }
+    }
+
+    #popup.active {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    #popup div {
+      height: 100%;
+      width: 100%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
+
+
+    #popup img {
+      width: 100%;
+      max-width: 150px;
+      border-radius: 10px;
+      border: 1px solid #fff;
+      margin-bottom: 30px;
+    }
+
+    #popup h2 {
+      margin: 20px 0;
+      font-size: 1.3em;
+      text-transform: uppercase;
+      color: #ffffff;
+      font-family: sans-serif;
+    }
+
+    #popup button {
+      padding: 20px 30px;
+      color: #624060;
+      background: url('./button-bg.jpg');
+      border: 0;
+      cursor: pointer;
+      stroke: 0;
+      font-size: 1.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-radius: 1000px;
+      /* box-shadow: 0 0 20px 1px rgb(203, 72, 207); */
+      -webkit-animation: pulse 1s ease 0s infinite alternate;
+      animation: pulse 1s ease 0s infinite alternate;
+    }
+
+    @media (max-width:670px) {
+      #popup {
+        padding: 5vw;
+      }
+
+      #popup h2 {
+        margin: 3vw 0;
+        font-size: 9vw;
+      }
+
+      #popup button {
+        padding: 3vw 4vw;
+        font-size: 8vw;
+      }
+    }
+
+    @-webkit-keyframes pulse {
+      0% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        -webkit-transform: scale(0.95);
+        transform: scale(0.95);
+      }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+
+    /* LEVEL 1 */
+
+
+
+
+
+
+.imgClonAnimation {
+  display: block;
+  position: fixed;
+  top: auto; bottom: auto; left: auto; right: auto;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  touch-action: none;
+
+}
+  </style>
+</head>
+<body id="bodyDom" style="width: 100%; height: 100%;
+overflow: hidden;
+touch-action: none;
+position: relative;
+filter: blur(0.00px);
+">
+
+<div id="popup">
+    <div>
+      <img draggable="false" src="./Kitchen.png" alt="Логотип игры" />
+      <h2>Find Sort Match</h2>
+      <button id="download-btn">Download</button>
+    </div>
+  </div>
+
+
+<div class="body-box">
+
+  <div class="game-box">
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img1" src="./c1.png" alt="Предмет 1">
+      </div>
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img2" src="./зеленая.png" alt="Предмет 3">
+      </div>
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img3" src="./c2.png" alt="Предмет 3">
+      </div>
+      <div class='ok-box'>
+        <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png">
+      </div>
+  </div>
+  <div class="game-box">
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img4" src="./c3.png" alt="Предмет 3">
+      </div>
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img5" src="./c3.png" alt="Предмет 3">
+      </div>
+      <div class="itemBox">
+        <img class="img-element" draggable="false" id="img6" src="./c1.png" alt="Предмет 3">
+      </div>
+      <div class='ok-box'><img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+      <div class="itemBox">
+          <img class="img-element" draggable="false" id="img7" src="./c3.png" alt="Предмет 1">
+      </div>
+      <div class="itemBox">
+
+      </div>
+      <div class="itemBox">
+          <img class="img-element" draggable="false" id="img8" src="./c1.png" alt="Предмет 3">
+      </div>
+      <div class='ok-box'>
+        <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img9" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img10" src="./зеленая.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img11" src="./c2.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img12" src="./зеленая.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img13" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img14" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img15" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img16" src="./c3.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img17" src="./c2.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img18" src="./c2.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img19" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img20" src="./v7.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img21" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img22" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img23" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img24" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img25" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img26" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img27" src="./c1.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img28" src="./f10.png" alt="Предмет 3">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img29" src="./s7.1.png" alt="Предмет 3">
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+  <div class="itemBox">
+
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img30" src="./elephant.png" alt="Предмет 3">
+  </div>
+  <div class="itemBox">
+
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img31" src="./c1.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+
+  </div>
+  <div class="itemBox">
+
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img32" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img33" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img34" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img35" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img36" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+
+  <div class="game-box">
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img37" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img38" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img39" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img40" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img41" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img42" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  
+  <div class="game-box">
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img43" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img44" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img45" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img46" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img47" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  
+  <div class="game-box">
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img48" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img49" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img50" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img51" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img55" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  
+  <div class="game-box">
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img56" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img57" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+
+
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img58" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img59" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+  <div class="game-box">
+    <div class="itemBox">
+  
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img60" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+  
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+  </div>
+
+  <div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img61" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img62" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img63" src="./c1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img64" src="./c3.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+        <img class="img-element" draggable="false" id="img65" src="./c1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img66" src="./c1.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img67" src="./зеленая.png" alt="Предмет 3">
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img68" src="./c2.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img69" src="./зеленая.png" alt="Предмет 3">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img70" src="./c3.png" alt="Предмет 3">
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img71" src="./c1.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img72" src="./c3.png" alt="Предмет 3">
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img73" src="./v7.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img74" src="./c3.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img75" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img76" src="./f10.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img77" src="./s7.1.png" alt="Предмет 3">
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+<div class="game-box">
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img78" src="./elephant.png" alt="Предмет 3">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+    <div class="itemBox">
+      <img class="img-element" draggable="false" id="img79" src="./c1.png" alt="Предмет 1">
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class="itemBox">
+
+    </div>
+    <div class='ok-box'>
+      <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+<div class="game-box">
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img80" src="./c1.png" alt="Предмет 1">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img90" src="./f10.png" alt="Предмет 3">
+  </div>
+  <div class="itemBox">
+    <img class="img-element" draggable="false" id="img91" src="./s7.1.png" alt="Предмет 3">
+  </div>
+  <div class='ok-box'>
+    <img width="50%" height="auto" draggable="false" src="./rubber-stamp-design.png"></div>
+</div>
+
+
+  
+
+</div>
+
+  <!-- Основний актив з CTA -->
+
+
+  <img class="img-element" draggable="true" id="imgId1" src="./c2.png" alt="Предмет 3" style="
+  display: none;
+  pointer-events: none;
+  ">
+
+
+  <script>
+    const imgId1 = document.getElementById('imgId1');
+    const popup = document.getElementById('popup');
+    const bodyDom = document.getElementById('bodyDom');
+    const bodyBox = document.querySelector('.body-box');
+
+    const buttonDownload = popup.querySelector('button');
+    buttonDownload.addEventListener('click', () => {
+      FbPlayableAd.onCTAClick();
+    })
+
+
+    const shelves = document.querySelectorAll('.itemBox');
+    const items = document.querySelectorAll('.img-element');
+
+    let draggedItem = null;
+    let imgClon = null;
+    let startPointerMove = null;
+    let gameReturn = 0;
+
+
+
+// Обробник для pointerdown
+bodyDom.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Pointerdown на дочірньому елементі:', e.target);
+    if(startPointerMove !== null && imgClon !== null) return;
+
+  let parent;
+  if(e.target.matches('.game-box') || e.target.querySelector('.game-box') || draggedItem) return;
+  if(!(parent = e.target.closest('.img-element')) && !(parent = e.target.querySelector('.img-element'))) return;
+  draggedItem = parent;
+
+  const rect = draggedItem.getBoundingClientRect();
+  const computedStyle = window.getComputedStyle(draggedItem);
+
+  imgClon = parent.cloneNode(true);
+  imgClon.className = 'imgClonAnimation';
+  imgClon.style.pointerEvents = 'none';
+
+  draggedItem.style.opacity = '0';
+  draggedItem.style.pointerEvents = 'none';
+
+  imgClon.style.transform = 'translate(0%, 0%) scaleX(1)';
+  imgClon.style.filter = 'blur(0)';
+
+  bodyDom.appendChild(imgClon);
+
+  imgClon.style.width = computedStyle.width;
+  imgClon.style.height = computedStyle.height;
+
+  imgClon.style.left = rect.x + "px";
+  imgClon.style.top = rect.y + "px";
+
+  imgClon.style.transition = 'all 0.25s linear';
+
+
+  requestAnimationFrame(() => {
+            if(startPointerMove === true) return console.log('startPointerMove true');
+            //imgClon.style.left = (e.clientX - (rect.width / 2)) + "px";
+            //imgClon.style.top = (e.clientY - (rect.height / 2)) + "px";
+
+            imgClon.style.left = (e.clientX) + "px";
+            imgClon.style.top = (e.clientY) + "px";
+
+            imgClon.style.transform = 'translate(-50%, -50%) scaleX(1.25)';
+            imgClon.style.filter = 'blur(0.05px)';
+        });
+
+
+});
+
+
+document.addEventListener('pointermove', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if(!draggedItem || !imgClon) return;
+        console.log('pointermove startPointerMove true', startPointerMove);
+        startPointerMove = true;
+
+        if(imgClon.style && imgClon.style.transition != 'none') imgClon.style.transition = 'none';
+        imgClon.style.transform = 'translate(-50%, -50%) scaleX(1.25)';
+        imgClon.style.filter = 'blur(0.05px)';
+        imgClon.style.left = (e.clientX) + "px";
+        imgClon.style.top = (e.clientY) + "px";
+
+
+});
+
+
+
+bodyDom.addEventListener('pointerleave', () => {
+  console.log('Курсор вийшов з елемента');
+  startPointerMove = null;
+
+  if (draggedItem && imgClon) {
+      imgClonClone = imgClon;
+
+      const rect = draggedItem.getBoundingClientRect();
+      imgClonClone.style.transform = 'translate(0%, 0%)';
+      imgClon.style.filter = 'blur(0)';
+      imgClonClone.style.transition = 'all 0.25s ease-in-out';
+      imgClonClone.style.left = rect.x + "px";
+      imgClonClone.style.top = rect.y + "px";
+
+      const draggedItemTransitio = draggedItem;
+      
+      //draggedItemTransitio.style.opacity = '1';
+
+      imgClonClone.addEventListener('transitionend', (event) => {
+        if(imgClonClone.remove()) imgClonClone = null;
+        draggedItemTransitio.style.opacity = '1';
+        draggedItemTransitio.style.pointerEvents = 'auto';
+        
+      }, { once: true });
+      imgClon = null;
+      draggedItem = null;
+      //alert('end shelf 2');
+  }
+
+});
+
+
+
+
+
+bodyDom.addEventListener('pointerup', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Pointerup на дочірньому елементі:', e.target);
+    if (!draggedItem || !imgClon) return;
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    
+    let parent;
+    if(target && (parent = target.closest('.itemBox')) && draggedItem){
+
+    if(target.closest('.img-element') || target.querySelector('.img-element')){
+
+        const parent = target.closest('.game-box');
+
+        if (parent) {
+            const emptyChild = Array.from(parent.children).find(child => child.childElementCount === 0 && child.textContent.trim() === '');
+    
+            if (emptyChild) {
+              if(emptyChild.className !== 'ok-box') {
+                console.log('Знайдено порожній дочірній елемент:', emptyChild);
+                audioStart(draggedItem.getAttribute('src'));
+                emptyChild.appendChild(draggedItem);
+                
+                const okBox = target.closest('.game-box');
+                const okBoxBox = okBox.querySelector('.ok-box');
+                if(allImagesInItemBoxesAreSame(okBox)){
+                  gameReturn++;
+                    //okBox.style.pointerEvents = 'none';
+                    okBoxBox.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        const items = Array.from(okBox.querySelectorAll('.itemBox'));
+                    //okBoxBox.style.height = '92%';
+                    okBoxBox.style.transform = 'scaleY(1)';
+                    });
+                }
+              }
+            } else {
+                console.log('Порожніх дочірніх елементів немає');
+            }
+        }
+
+    } else {
+        parent.appendChild(draggedItem);
+        audioStart(draggedItem.getAttribute('src'));
+
+
+        const okBox = target.closest('.game-box');
+        if(allImagesInItemBoxesAreSame(okBox)){
+          gameReturn++;
+            //okBox.style.pointerEvents = 'none';
+            const okBoxBox = okBox.querySelector('.ok-box');
+                    okBoxBox.style.display = 'block';
+                    requestAnimationFrame(() => {
+                    //okBoxBox.style.height = '92%';
+                    okBoxBox.style.transform = 'scaleY(1)';
+                    });
+        }
+    }
+
+  }
+
+      imgClonClone = imgClon;
+
+      const rect = draggedItem.getBoundingClientRect();
+      imgClonClone.style.transform = 'translate(0%, 0%)';
+      imgClonClone.style.transition = 'all 0.25s ease-in-out';
+      imgClonClone.style.left = rect.x + "px";
+      imgClonClone.style.top = rect.y + "px";
+
+      const draggedItemTransitio = draggedItem;
+
+      imgClonClone.addEventListener('transitionend', (event) => {
+        if(imgClonClone.remove()) imgClonClone = null;
+        requestAnimationFrame(() => {
+        draggedItemTransitio.style.opacity = '1';
+        draggedItemTransitio.style.pointerEvents = 'auto';
+        startPointerMove = null;
+
+        if(gameReturn === 10){
+          //buttonDownload();
+          popup.classList.add('active');
+        }
+        });
+      }, { once: true });
+      
+      draggedItem = null;
+      imgClon = null;
+      //draggedItem = null;
+
+
+});
+
+
+
+function allImagesInItemBoxesAreSame(parent) {
+    const items = Array.from(parent.querySelectorAll('.itemBox'));
+    
+    // Отримуємо всі `src` зображень у .itemBox
+    const imagesSrc = items.map(item => {
+        const img = item.querySelector('img');
+        return img ? img.getAttribute('src') : null;
+    });
+
+    // Якщо немає зображень або є хоча б один пустий `.itemBox`, повертаємо false
+    if (imagesSrc.includes(null) || imagesSrc.length === 0) return false;
+
+    // Перевіряємо, чи всі `src` однакові
+    return new Set(imagesSrc).size === 1;
+}
+
+
+
+
+
+
+
+const audioStart = (url) => {
+console.log('audioStart ' + url + ' ', urlAudioStart[url]);
+const audio = new Audio(urlAudioStart[url]);
+audio.volume = 0.2;
+audio.error = (error) => { console.log('audio.error', error); };
+audio.oncanplaythrough = () => {
+  console.log('Аудіо завантажене, можна відтворювати');
+  audio.play().catch(error => {
+    console.error('Помилка при відтворенні:', error);
+  });
+};
+};
+
+const urlAudioStart = {
+'./c1.png': './assets/audio/переместить 1.mp3',
+'./c2.png': './assets/audio/переместить 2.mp3',
+'./c3.png': './assets/audio/переместить 3.mp3',
+'./s7.1.png': './assets/audio/поставить.wav',
+'./elephant.png': './assets/audio/маленький слон_поставить.mp3',
+'./f10.png': './assets/audio/яблоко поставить.mp3',
+'./v7.png': './assets/audio/помидор поставить.mp3',
+'./зеленая.png': './audio/поставить-сода.mp3'
+};
+
+
+  </script>
+</body>
+</html>
